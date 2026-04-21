@@ -1,26 +1,79 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Figma Make — surfaces */
+  --deep-space: #0a0a0f;
+  --space-gray: #13131a;
+  --metal-gray: #2d2d3a;
+  --card: var(--space-gray);
+  --popover: var(--metal-gray);
+
+  --background: var(--deep-space);
+  --foreground: #ffffff;
+  --muted: var(--metal-gray);
+  --muted-foreground: #9ca3af;
+
+  --border: rgba(139, 92, 246, 0.2);
+  --border-strong: rgba(139, 92, 246, 0.35);
+  --input: rgba(139, 92, 246, 0.1);
+
+  /* Figma Make — neon accents */
+  --neon-purple: #8b5cf6;
+  --neon-blue: #3b82f6;
+  --neon-cyan: #06b6d4;
+  --neon-pink: #ec4899;
+
+  --primary: var(--neon-purple);
+  --primary-foreground: #ffffff;
+  --ring: var(--neon-purple);
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-card: var(--card);
+  --color-popover: var(--popover);
+  --color-border: var(--border);
+  --color-border-strong: var(--border-strong);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-neon-purple: var(--neon-purple);
+  --color-neon-blue: var(--neon-blue);
+  --color-neon-cyan: var(--neon-cyan);
+  --color-neon-pink: var(--neon-pink);
+  --color-space-gray: var(--space-gray);
+  --color-metal-gray: var(--metal-gray);
+  --color-deep-space: var(--deep-space);
+  --font-body: var(--font-body);
+  --font-display: var(--font-display);
+  --font-sans: var(--font-body);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html, body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-body), ui-sans-serif, system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-image:
+    radial-gradient(circle at 10% 10%, rgba(139, 92, 246, 0.14), transparent 45%),
+    radial-gradient(circle at 90% 90%, rgba(59, 130, 246, 0.12), transparent 45%);
+  background-attachment: fixed;
+}
+
+.font-display {
+  font-family: var(--font-display), ui-sans-serif, system-ui, sans-serif;
+  letter-spacing: -0.01em;
+}
+
+.neon-glow {
+  box-shadow: 0 0 0 1px rgba(139, 92, 246, 0.35),
+    0 12px 48px -12px rgba(139, 92, 246, 0.55);
+}
+
+.neon-ring {
+  box-shadow: 0 0 24px rgba(139, 92, 246, 0.45);
 }
