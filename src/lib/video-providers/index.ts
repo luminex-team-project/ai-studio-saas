@@ -5,33 +5,42 @@ import { klingProvider } from './kling'
 import { lumaProvider } from './luma'
 import { runwayProvider } from './runway'
 import { mockVideoProvider } from './mock'
+import { seedanceProvider } from './seedance'
+import { heygenProvider } from './heygen'
+import { veoProvider } from './veo'
+import { hedraProvider } from './hedra'
 import type { ProviderKind, VideoProvider } from './types'
 
-// Routing rules for the 3 scenarios mapped in the design doc:
+// Routing rules cover:
 //
-//  1. Beauty / mask pack (image-to-video, single model talking to camera):
-//     Kling 2.5 Pro — best face/skin consistency, handles product hand-off.
-//  2. Game arcade / multi-person action (text-to-video, dynamic crowd scene):
-//     Kling 2.5 Pro — best with multiple subjects + fast motion.
-//  3. Narrative / concept montage (text-to-video, abstract):
-//     Luma Ray 2 — strongest on smooth camera moves + scene transitions.
+//  - Legacy 3 providers (Kling/Runway/Luma) for selfie/product/text2video.
+//  - 4 new workflow providers (Seedance/HeyGen/Veo/Hedra) for the 4 concept
+//    job types. The new providers currently fall back to their closest legacy
+//    peer (Seedance→Kling, HeyGen→Kling, Veo→Luma, Hedra→Kling) until the real
+//    API keys are provisioned — see each provider file for the TODO markers.
 //
-// `options.provider_override` in the job row bypasses the rules so the
-// Phase-1 comparison test can pin a specific provider per run.
+//  Override precedence:
+//    options.force_mock → mock
+//    options.provider_override → named provider
+//    job.provider_kind → named provider
+//    concept_id → workflow routing
+//    scenario tag → legacy routing
 
 const PROVIDERS: Record<ProviderKind, VideoProvider> = {
   kling: klingProvider,
   runway: runwayProvider,
   luma: lumaProvider,
   mock: mockVideoProvider,
+  seedance: seedanceProvider,
+  heygen: heygenProvider,
+  veo: veoProvider,
+  hedra: hedraProvider,
 }
 
 type ScenarioTag = 'beauty' | 'people_action' | 'narrative' | 'product' | 'other'
 
 function tagScenario(job: VideoJobRow): ScenarioTag {
   const haystack = `${job.prompt ?? ''} ${job.scenario ?? ''}`.toLowerCase()
-  // Keep this intentionally small + explicit. Tags should match the 3
-  // reference scenarios and nothing else; unmatched → 'other' → default.
   if (/(마스크팩|화장품|뷰티|립|크림|스킨|토너|mask|beauty|skincare)/.test(haystack)) {
     return 'beauty'
   }
@@ -48,8 +57,6 @@ function tagScenario(job: VideoJobRow): ScenarioTag {
 function routeByTag(tag: ScenarioTag, hasImage: boolean): ProviderKind {
   switch (tag) {
     case 'beauty':
-      // i2v: Kling wins on realistic face + product. Falls back to Runway if
-      // no image provided (shouldn't happen for beauty, but safe).
       return hasImage ? 'kling' : 'luma'
     case 'people_action':
       return 'kling'
@@ -63,9 +70,33 @@ function routeByTag(tag: ScenarioTag, hasImage: boolean): ProviderKind {
   }
 }
 
+// Concept-level routing for the 4 new workflows.
+// `job.type` is narrowed by the generated types to the legacy 3 values —
+// cast to string so the runtime check matches migration-added values
+// before `npm run db:types` is re-run.
+function routeByConcept(job: VideoJobRow): ProviderKind | null {
+  const jobType = job.type as string
+  switch (jobType) {
+    case 'commercial_ad':
+      // Identity-locked product ads → Seedance 2.0 (stub → Kling).
+      return 'seedance'
+    case 'scene_reenact':
+      // Face-preserving i2v → Kling (uses user-uploaded selfie as ref).
+      return 'kling'
+    case 'trend_clone':
+      // Vibe-driven remix. If user uploaded reference image → Kling i2v,
+      // else → Luma for "full AI meta" t2v track.
+      return job.source_image_urls.length > 0 ? 'kling' : 'luma'
+    case 'ai_news':
+      // Talking-head avatar → HeyGen (stub → Kling). B-roll is handled by a
+      // separate chained job once the news pipeline is wired.
+      return 'heygen'
+    default:
+      return null
+  }
+}
+
 export function resolveProvider(job: VideoJobRow): VideoProvider {
-  // Honor an explicit override first — needed for the Phase-1 comparison
-  // where we pin every combination of (scenario × provider).
   const opts = (job.options ?? {}) as {
     provider_override?: ProviderKind
     force_mock?: boolean
@@ -74,10 +105,11 @@ export function resolveProvider(job: VideoJobRow): VideoProvider {
   if (opts.provider_override && PROVIDERS[opts.provider_override]) {
     return PROVIDERS[opts.provider_override]
   }
-  // Typed column wins over freeform text column.
   if (job.provider_kind && PROVIDERS[job.provider_kind]) {
     return PROVIDERS[job.provider_kind]
   }
+  const conceptRoute = routeByConcept(job)
+  if (conceptRoute) return PROVIDERS[conceptRoute]
   const tag = tagScenario(job)
   const hasImage = job.source_image_urls.length > 0
   return PROVIDERS[routeByTag(tag, hasImage)]

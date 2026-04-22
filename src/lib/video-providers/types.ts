@@ -13,7 +13,15 @@ export type ProviderContext = {
   onProgress: (progress: number) => Promise<void>
 }
 
-export type ProviderKind = 'runway' | 'kling' | 'luma' | 'mock'
+export type ProviderKind =
+  | 'runway'
+  | 'kling'
+  | 'luma'
+  | 'mock'
+  | 'seedance'   // Identity Lock t2v/i2v (Concept 1 primary)
+  | 'heygen'     // Avatar video (Concept 4 primary)
+  | 'veo'        // Native audio t2v (Concept 4 B-roll)
+  | 'hedra'      // Lipsync (post-production for talking shots)
 
 export interface VideoProvider {
   name: ProviderKind
