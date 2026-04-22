@@ -184,13 +184,25 @@ export const klingProvider: VideoProvider = {
     let finalVideoUrl = baseResult.task_result!.videos[0].url
     const baseVideoId = baseResult.task_result!.videos[0].id
 
-    // Step 2: extend by 5s if we need 15s final output.
+    // Step 2: extend by 5s if we need 15s final output. Kling's video-extend
+    // endpoint isn't supported on every model (kling-v2-6 returns code 1201
+    // for i2v outputs) — treat the extension as best-effort and fall back to
+    // the base 10s clip if it fails rather than losing the successful base.
+    let actualDuration = target >= 10 ? 10 : 5
     if (target >= 15) {
-      const extendTaskId = await extendVideo(baseVideoId, prompt)
-      const extendResult = await pollTask('video-extend', extendTaskId, onProgress, 55, 88)
-      // Extension returns the extended video as a new entry — prefer it.
-      const extended = extendResult.task_result?.videos?.[0]?.url
-      if (extended) finalVideoUrl = extended
+      try {
+        const extendTaskId = await extendVideo(baseVideoId, prompt)
+        const extendResult = await pollTask('video-extend', extendTaskId, onProgress, 55, 88)
+        const extended = extendResult.task_result?.videos?.[0]?.url
+        if (extended) {
+          finalVideoUrl = extended
+          actualDuration = 15
+        }
+      } catch (e) {
+        const msg = e instanceof Error ? e.message : String(e)
+        console.warn(`[kling] extend failed, keeping 10s base: ${msg}`)
+        await onProgress(88)
+      }
     }
 
     // Step 3: mirror to Supabase Storage via Cloudinary.
@@ -202,7 +214,7 @@ export const klingProvider: VideoProvider = {
     return {
       outputVideoUrl: mirrored.videoKey,
       outputThumbnailUrl: mirrored.thumbKey,
-      durationSeconds: mirrored.durationSeconds || target,
+      durationSeconds: mirrored.durationSeconds || actualDuration,
       providerJobId: baseTaskId,
       providerModel: modelT2V,
     }
