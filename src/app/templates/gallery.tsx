@@ -14,6 +14,8 @@ export type TemplateCard = {
   likes: number
   uses: number
   accent: string
+  previewVideoUrl: string | null
+  thumbnailUrl: string | null
 }
 
 const CATEGORIES = ['전체', '트렌드', '댄스', '패션', '제품', '일상', '챌린지'] as const
@@ -62,10 +64,27 @@ export function TemplatesGallery({ templates }: { templates: TemplateCard[] }) {
         {visible.map((t) => (
           <Link
             key={t.id}
-            href={`/create/selfie?template=${t.id}`}
+            href={`/create/selfie?template=${t.slug}`}
             className="group relative aspect-[9/16] overflow-hidden rounded-2xl border border-border bg-space-gray/60 transition hover:border-border-strong"
           >
-            <div aria-hidden className={`absolute inset-0 bg-gradient-to-br ${t.accent}`} />
+            {t.previewVideoUrl ? (
+              <video
+                src={t.previewVideoUrl}
+                poster={t.thumbnailUrl ?? undefined}
+                muted
+                playsInline
+                loop
+                preload="metadata"
+                onMouseEnter={(e) => void e.currentTarget.play().catch(() => {})}
+                onMouseLeave={(e) => {
+                  e.currentTarget.pause()
+                  e.currentTarget.currentTime = 0
+                }}
+                className="absolute inset-0 h-full w-full object-cover"
+              />
+            ) : (
+              <div aria-hidden className={`absolute inset-0 bg-gradient-to-br ${t.accent}`} />
+            )}
 
             {t.trending ? (
               <span className="absolute left-4 top-4 inline-flex items-center gap-1 rounded-full border border-neon-pink/40 bg-neon-pink/15 px-2 py-1 text-xs text-neon-pink">
@@ -74,9 +93,9 @@ export function TemplatesGallery({ templates }: { templates: TemplateCard[] }) {
               </span>
             ) : null}
 
-            <div className="absolute inset-x-0 bottom-0 p-4">
+            <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 to-transparent p-4">
               <p className="text-xs text-muted-foreground">{t.category}</p>
-              <p className="mt-1 text-base">{t.name}</p>
+              <p className="mt-1 text-base text-white">{t.name}</p>
               <div className="mt-3 flex items-center gap-4 text-xs text-muted-foreground">
                 <span className="inline-flex items-center gap-1">
                   <Heart className="size-3" />

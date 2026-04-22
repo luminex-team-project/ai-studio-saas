@@ -14,7 +14,8 @@ const PhaseEnum = z.enum(['preview_5s', 'final_15s'])
 
 const SelfieInput = z.object({
   template_id: z.string().uuid().nullable(),
-  source_image_paths: z.array(z.string().min(1)).min(1).max(1),
+  source_image_paths: z.array(z.string().min(1)).min(1).max(3),
+  prompt: z.string().min(5).max(2000).optional(),
   options: z.object({
     duration: DurationEnum,
     music: MusicEnum,
@@ -104,6 +105,7 @@ export async function createSelfieJob(input: SelfieInputT): Promise<CreateJobRes
       type: 'selfie',
       template_id: parsed.data.template_id,
       source_image_urls: parsed.data.source_image_paths,
+      prompt: parsed.data.prompt ?? null,
       options: parsed.data.options,
       credits_cost: CREDITS.selfie,
     },

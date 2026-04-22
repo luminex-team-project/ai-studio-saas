@@ -18,7 +18,9 @@ export default async function TemplatesPage() {
   const supabase = await createClient()
   const { data: rows } = await supabase
     .from('templates')
-    .select('id, slug, name, category, trending, likes_count, uses_count')
+    .select(
+      'id, slug, name, category, trending, likes_count, uses_count, preview_video_url, thumbnail_url',
+    )
     .order('display_order', { ascending: true })
 
   const templates: TemplateCard[] = (rows ?? []).map((t, i) => ({
@@ -29,6 +31,8 @@ export default async function TemplatesPage() {
     trending: t.trending,
     likes: t.likes_count,
     uses: t.uses_count,
+    previewVideoUrl: t.preview_video_url,
+    thumbnailUrl: t.thumbnail_url,
     accent: ACCENTS[i % ACCENTS.length],
   }))
 

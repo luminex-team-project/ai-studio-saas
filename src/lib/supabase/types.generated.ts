@@ -94,12 +94,14 @@ export type Database = {
           category: Database["public"]["Enums"]["template_category"]
           created_at: string
           display_order: number
+          example_prompt: string | null
           id: string
           is_premium: boolean
           likes_count: number
           name: string
           popular: boolean
           preview_video_url: string | null
+          replace_target_hint: string | null
           slug: string
           thumbnail_url: string | null
           trending: boolean
@@ -110,12 +112,14 @@ export type Database = {
           category: Database["public"]["Enums"]["template_category"]
           created_at?: string
           display_order?: number
+          example_prompt?: string | null
           id?: string
           is_premium?: boolean
           likes_count?: number
           name: string
           popular?: boolean
           preview_video_url?: string | null
+          replace_target_hint?: string | null
           slug: string
           thumbnail_url?: string | null
           trending?: boolean
@@ -126,12 +130,14 @@ export type Database = {
           category?: Database["public"]["Enums"]["template_category"]
           created_at?: string
           display_order?: number
+          example_prompt?: string | null
           id?: string
           is_premium?: boolean
           likes_count?: number
           name?: string
           popular?: boolean
           preview_video_url?: string | null
+          replace_target_hint?: string | null
           slug?: string
           thumbnail_url?: string | null
           trending?: boolean
