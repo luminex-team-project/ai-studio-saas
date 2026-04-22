@@ -71,12 +71,8 @@ function routeByTag(tag: ScenarioTag, hasImage: boolean): ProviderKind {
 }
 
 // Concept-level routing for the 4 new workflows.
-// `job.type` is narrowed by the generated types to the legacy 3 values —
-// cast to string so the runtime check matches migration-added values
-// before `npm run db:types` is re-run.
 function routeByConcept(job: VideoJobRow): ProviderKind | null {
-  const jobType = job.type as string
-  switch (jobType) {
+  switch (job.type) {
     case 'commercial_ad':
       // Identity-locked product ads → Seedance 2.0 (stub → Kling).
       return 'seedance'

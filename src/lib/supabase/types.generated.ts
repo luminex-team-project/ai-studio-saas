@@ -56,6 +56,69 @@ export type Database = {
         }
         Relationships: []
       }
+      product_models: {
+        Row: {
+          age_label: string
+          best_for: string[]
+          brand_tone: string | null
+          created_at: string
+          display_name: string
+          display_order: number
+          elevenlabs_voice_id: string | null
+          id: string
+          is_active: boolean
+          midjourney_cref_url: string | null
+          persona: string
+          physical_description: string | null
+          reference_front_path: string | null
+          reference_side_path: string | null
+          reference_three_quarter_path: string | null
+          seedance_identity_lock_id: string | null
+          slug: string
+          updated_at: string
+        }
+        Insert: {
+          age_label: string
+          best_for?: string[]
+          brand_tone?: string | null
+          created_at?: string
+          display_name: string
+          display_order?: number
+          elevenlabs_voice_id?: string | null
+          id?: string
+          is_active?: boolean
+          midjourney_cref_url?: string | null
+          persona: string
+          physical_description?: string | null
+          reference_front_path?: string | null
+          reference_side_path?: string | null
+          reference_three_quarter_path?: string | null
+          seedance_identity_lock_id?: string | null
+          slug: string
+          updated_at?: string
+        }
+        Update: {
+          age_label?: string
+          best_for?: string[]
+          brand_tone?: string | null
+          created_at?: string
+          display_name?: string
+          display_order?: number
+          elevenlabs_voice_id?: string | null
+          id?: string
+          is_active?: boolean
+          midjourney_cref_url?: string | null
+          persona?: string
+          physical_description?: string | null
+          reference_front_path?: string | null
+          reference_side_path?: string | null
+          reference_three_quarter_path?: string | null
+          seedance_identity_lock_id?: string | null
+          slug?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           avatar_url: string | null
@@ -86,6 +149,69 @@ export type Database = {
           id?: string
           role?: string
           updated_at?: string
+        }
+        Relationships: []
+      }
+      prompt_templates: {
+        Row: {
+          caption_template: string | null
+          category: string | null
+          concept_id: number
+          concept_name: string
+          created_at: string
+          description: string | null
+          display_name: string
+          display_order: number
+          duration_sec: number
+          hashtags_pool: string | null
+          id: string
+          is_active: boolean
+          platform_target: string[]
+          recommended_model_slugs: string[]
+          stages: Json
+          subcategory: string
+          updated_at: string
+          variables: Json
+        }
+        Insert: {
+          caption_template?: string | null
+          category?: string | null
+          concept_id: number
+          concept_name: string
+          created_at?: string
+          description?: string | null
+          display_name: string
+          display_order?: number
+          duration_sec?: number
+          hashtags_pool?: string | null
+          id?: string
+          is_active?: boolean
+          platform_target?: string[]
+          recommended_model_slugs?: string[]
+          stages?: Json
+          subcategory: string
+          updated_at?: string
+          variables?: Json
+        }
+        Update: {
+          caption_template?: string | null
+          category?: string | null
+          concept_id?: number
+          concept_name?: string
+          created_at?: string
+          description?: string | null
+          display_name?: string
+          display_order?: number
+          duration_sec?: number
+          hashtags_pool?: string | null
+          id?: string
+          is_active?: boolean
+          platform_target?: string[]
+          recommended_model_slugs?: string[]
+          stages?: Json
+          subcategory?: string
+          updated_at?: string
+          variables?: Json
         }
         Relationships: []
       }
@@ -212,9 +338,12 @@ export type Database = {
       video_jobs: {
         Row: {
           ai_model_id: string | null
+          brief: Json | null
           completed_at: string | null
+          concept_id: number | null
           created_at: string
           credits_cost: number
+          delivery_type: string | null
           duration_seconds: number | null
           error_message: string | null
           id: string
@@ -223,8 +352,10 @@ export type Database = {
           output_video_url: string | null
           parent_job_id: string | null
           phase: string | null
+          product_model_id: string | null
           progress: number
           prompt: string | null
+          prompt_template_id: string | null
           provider: string | null
           provider_job_id: string | null
           provider_kind: Database["public"]["Enums"]["video_provider"] | null
@@ -233,16 +364,22 @@ export type Database = {
           source_image_urls: string[]
           started_at: string | null
           status: Database["public"]["Enums"]["video_job_status"]
+          storyboard: Json | null
           template_id: string | null
+          trend_reference_path: string | null
+          trend_reference_url: string | null
           type: Database["public"]["Enums"]["video_job_type"]
           updated_at: string
           user_id: string
         }
         Insert: {
           ai_model_id?: string | null
+          brief?: Json | null
           completed_at?: string | null
+          concept_id?: number | null
           created_at?: string
           credits_cost: number
+          delivery_type?: string | null
           duration_seconds?: number | null
           error_message?: string | null
           id?: string
@@ -251,8 +388,10 @@ export type Database = {
           output_video_url?: string | null
           parent_job_id?: string | null
           phase?: string | null
+          product_model_id?: string | null
           progress?: number
           prompt?: string | null
+          prompt_template_id?: string | null
           provider?: string | null
           provider_job_id?: string | null
           provider_kind?: Database["public"]["Enums"]["video_provider"] | null
@@ -261,16 +400,22 @@ export type Database = {
           source_image_urls?: string[]
           started_at?: string | null
           status?: Database["public"]["Enums"]["video_job_status"]
+          storyboard?: Json | null
           template_id?: string | null
+          trend_reference_path?: string | null
+          trend_reference_url?: string | null
           type: Database["public"]["Enums"]["video_job_type"]
           updated_at?: string
           user_id: string
         }
         Update: {
           ai_model_id?: string | null
+          brief?: Json | null
           completed_at?: string | null
+          concept_id?: number | null
           created_at?: string
           credits_cost?: number
+          delivery_type?: string | null
           duration_seconds?: number | null
           error_message?: string | null
           id?: string
@@ -279,8 +424,10 @@ export type Database = {
           output_video_url?: string | null
           parent_job_id?: string | null
           phase?: string | null
+          product_model_id?: string | null
           progress?: number
           prompt?: string | null
+          prompt_template_id?: string | null
           provider?: string | null
           provider_job_id?: string | null
           provider_kind?: Database["public"]["Enums"]["video_provider"] | null
@@ -289,7 +436,10 @@ export type Database = {
           source_image_urls?: string[]
           started_at?: string | null
           status?: Database["public"]["Enums"]["video_job_status"]
+          storyboard?: Json | null
           template_id?: string | null
+          trend_reference_path?: string | null
+          trend_reference_url?: string | null
           type?: Database["public"]["Enums"]["video_job_type"]
           updated_at?: string
           user_id?: string
@@ -307,6 +457,20 @@ export type Database = {
             columns: ["parent_job_id"]
             isOneToOne: false
             referencedRelation: "video_jobs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "video_jobs_product_model_id_fkey"
+            columns: ["product_model_id"]
+            isOneToOne: false
+            referencedRelation: "product_models"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "video_jobs_prompt_template_id_fkey"
+            columns: ["prompt_template_id"]
+            isOneToOne: false
+            referencedRelation: "prompt_templates"
             referencedColumns: ["id"]
           },
           {
@@ -346,6 +510,7 @@ export type Database = {
         Args: { p_note?: string; p_transaction_id: string }
         Returns: undefined
       }
+      is_admin: { Args: never; Returns: boolean }
     }
     Enums: {
       template_category:
@@ -365,8 +530,23 @@ export type Database = {
         | "completed"
         | "failed"
         | "cancelled"
-      video_job_type: "selfie" | "product" | "text2video"
-      video_provider: "runway" | "kling" | "luma" | "mock"
+      video_job_type:
+        | "selfie"
+        | "product"
+        | "text2video"
+        | "commercial_ad"
+        | "scene_reenact"
+        | "trend_clone"
+        | "ai_news"
+      video_provider:
+        | "runway"
+        | "kling"
+        | "luma"
+        | "mock"
+        | "seedance"
+        | "heygen"
+        | "veo"
+        | "hedra"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -963,8 +1143,25 @@ export const Constants = {
         "failed",
         "cancelled",
       ],
-      video_job_type: ["selfie", "product", "text2video"],
-      video_provider: ["runway", "kling", "luma", "mock"],
+      video_job_type: [
+        "selfie",
+        "product",
+        "text2video",
+        "commercial_ad",
+        "scene_reenact",
+        "trend_clone",
+        "ai_news",
+      ],
+      video_provider: [
+        "runway",
+        "kling",
+        "luma",
+        "mock",
+        "seedance",
+        "heygen",
+        "veo",
+        "hedra",
+      ],
     },
   },
   storage: {

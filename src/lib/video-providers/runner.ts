@@ -30,9 +30,7 @@ export async function runVideoJob(jobId: string): Promise<{ ok: true; status: st
       progress: 5,
       started_at: new Date().toISOString(),
       provider: provider.name,
-      // Cast needed until types.generated.ts includes the 4 new provider enum
-      // values added in 20260423000000_four_workflows_enums.sql.
-      provider_kind: provider.name as 'runway' | 'kling' | 'luma' | 'mock',
+      provider_kind: provider.name,
     })
     .eq('id', job.id)
 

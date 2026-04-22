@@ -5,9 +5,18 @@ import Link from 'next/link'
 import { Download, Play, Share2 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
+export type VideoJobType =
+  | 'selfie'
+  | 'product'
+  | 'text2video'
+  | 'commercial_ad'
+  | 'scene_reenact'
+  | 'trend_clone'
+  | 'ai_news'
+
 export type VideoCard = {
   id: string
-  type: 'selfie' | 'product' | 'text2video'
+  type: VideoJobType
   status: 'completed' | 'processing' | 'pending' | 'failed' | 'cancelled'
   duration: string
   title: string
@@ -16,12 +25,36 @@ export type VideoCard = {
   accent: string
 }
 
-const FILTERS: Array<{ id: 'all' | 'selfie' | 'product' | 'text2video'; label: string }> = [
-  { id: 'all', label: '전체' },
-  { id: 'selfie', label: '내 사진 영상' },
-  { id: 'product', label: '제품 영상' },
-  { id: 'text2video', label: '텍스트 영상' },
+const FILTERS: Array<{ id: 'all' | VideoJobType; label: string }> = [
+  { id: 'all',           label: '전체' },
+  { id: 'commercial_ad', label: '상업 광고' },
+  { id: 'scene_reenact', label: '명장면 재연' },
+  { id: 'trend_clone',   label: '트렌드 복제' },
+  { id: 'ai_news',       label: 'AI 뉴스' },
+  { id: 'selfie',        label: '셀피 (legacy)' },
+  { id: 'product',       label: '제품 (legacy)' },
+  { id: 'text2video',    label: '텍스트 (legacy)' },
 ]
+
+const TYPE_LABEL: Record<VideoJobType, string> = {
+  selfie: '셀피',
+  product: '제품',
+  text2video: '텍스트',
+  commercial_ad: '상업 광고',
+  scene_reenact: '명장면',
+  trend_clone: '트렌드',
+  ai_news: 'AI 뉴스',
+}
+
+const TYPE_ACCENT: Record<VideoJobType, string> = {
+  selfie:        'border-neon-purple/40 bg-neon-purple/15 text-neon-purple',
+  product:       'border-neon-blue/40 bg-neon-blue/15 text-neon-blue',
+  text2video:    'border-neon-cyan/40 bg-neon-cyan/15 text-neon-cyan',
+  commercial_ad: 'border-neon-purple/40 bg-neon-purple/15 text-neon-purple',
+  scene_reenact: 'border-neon-blue/40 bg-neon-blue/15 text-neon-blue',
+  trend_clone:   'border-neon-cyan/40 bg-neon-cyan/15 text-neon-cyan',
+  ai_news:       'border-neon-pink/40 bg-neon-pink/15 text-neon-pink',
+}
 
 const dateFormatter = new Intl.DateTimeFormat('ko-KR', {
   year: 'numeric',
@@ -101,12 +134,10 @@ export function MyVideosGrid({ videos }: { videos: VideoCard[] }) {
                 <span
                   className={cn(
                     'absolute left-3 top-3 rounded-full border px-2 py-0.5 text-[10px]',
-                    v.type === 'selfie'
-                      ? 'border-neon-purple/40 bg-neon-purple/15 text-neon-purple'
-                      : 'border-neon-blue/40 bg-neon-blue/15 text-neon-blue',
+                    TYPE_ACCENT[v.type],
                   )}
                 >
-                  {v.type === 'selfie' ? '셀피' : '제품'}
+                  {TYPE_LABEL[v.type]}
                 </span>
                 <span className="absolute bottom-3 right-3 rounded-md bg-black/60 px-2 py-0.5 text-xs">
                   {v.duration}
