@@ -1,0 +1,138 @@
+{
+  "$schema": "v1",
+  "concept_id": 3,
+  "concept_name": "trend-replication",
+  "description": "트렌드 복제. 모드 A (자체 SaaS) / B (본인+AI) / C (풀 AI 변환) 3가지 트랙. 트렌드 메타 자체를 변형해 차별화.",
+  "variables": {
+    "TREND_NAME": "트렌드 이름 (예: Apple Watch Dance)",
+    "TREND_SOUND_URL": "TikTok/Reels 사운드 URL",
+    "TREND_REFERENCE_URL": "벤치마크 영상 URL",
+    "TREND_KEY_ACTION": "키 동작 영어 묘사",
+    "TREND_VIBE": "분위기 (예: playful, dramatic, dreamy)"
+  },
+  "modes": {
+    "mode_a_saas_template": {
+      "description": "자체 ai-studio-saas 템플릿 활용. 가장 빠름, 도그푸딩 효과.",
+      "tool": "self-platform",
+      "matching_table": {
+        "dance-challenge": "댄스/안무 트렌드",
+        "pose-transition": "포즈 변환 트렌드",
+        "rotate-360": "360 회전 트렌드",
+        "reaction-challenge": "리액션 트렌드",
+        "daily-vlog": "브이로그 형식 트렌드",
+        "slow-motion-walk": "슬로우 워크 트렌드",
+        "fashion-walk": "패션 트렌드",
+        "product-unboxing": "언박싱 트렌드"
+      },
+      "stages": [
+        {
+          "stage": "template-pick",
+          "tool": "self-platform",
+          "instruction": "ai-studio-saas /create/selfie → 매칭 템플릿 슬러그 선택"
+        },
+        {
+          "stage": "image-upload",
+          "instruction": "본인 셀카 또는 AI 모델 캐릭터 이미지 업로드 (1장)"
+        },
+        {
+          "stage": "prompt-customize",
+          "prompt_template": "원본 [TREND_KEY_ACTION] 그대로, 표정은 [TREND_VIBE], 마지막에 카메라를 향해 윙크 추가",
+          "instruction": "example_prompt에 트렌드 특화 문구 추가"
+        },
+        {
+          "stage": "generate",
+          "credit_cost": 10,
+          "duration": 5,
+          "expected_time_min": 3
+        }
+      ],
+      "caption_template": "AI한테 [TREND_NAME] 시켜봤음 🤖"
+    },
+    "mode_b_self_plus_ai": {
+      "description": "본인 동작 직접 촬영 + AI로 배경/의상만 변형. 개성 강조.",
+      "stages": [
+        {
+          "stage": "shoot-self",
+          "tool": "smartphone",
+          "instruction": "본인이 동작 직접 촬영 (9:16, 5~10초). 단순 배경 권장 (그린스크린 효과)"
+        },
+        {
+          "stage": "extract-keyframes",
+          "tool": "capcut",
+          "instruction": "키 프레임 3장 추출 (시작/중간/끝)"
+        },
+        {
+          "stage": "img2img-transform",
+          "tool": "midjourney-v7-img2img",
+          "prompt_template": "Same person, same pose, but in [NEW_BACKGROUND] wearing [NEW_OUTFIT], [TREND_VIBE] aesthetic, photorealistic --ar 9:16 --v 7",
+          "instruction": "각 키프레임을 Midjourney img2img로 배경/의상 교체"
+        },
+        {
+          "stage": "video-generation",
+          "tool": "kling-2.5-pro-i2v",
+          "prompt_template": "Same [TREND_KEY_ACTION] motion, in new environment, smooth natural motion, preserve face identity",
+          "duration": 5
+        },
+        {
+          "stage": "edit",
+          "tool": "capcut",
+          "checklist": [
+            "원본 동작 1초 + AI 변형 컷 5초 교차",
+            "트렌드 사운드 동기화 (앱 내 사운드 픽)",
+            "비트 매칭 컷 트랜지션"
+          ]
+        }
+      ],
+      "caption_template": "내 동작에 AI 입혔더니 🌀 [TREND_NAME]"
+    },
+    "mode_c_full_ai_meta": {
+      "description": "트렌드를 AI 미학으로 재해석. 와우 효과 최강, 차별화 최강.",
+      "variants": {
+        "robot": "사이버펑크 로봇이 따라한다면",
+        "pixar": "픽사 캐릭터가 따라한다면",
+        "vintage": "8mm 필름 시대 사람이 따라한다면",
+        "underwater": "수중에서 따라한다면",
+        "anime": "애니 캐릭터가 따라한다면"
+      },
+      "stages": [
+        {
+          "stage": "concept-line",
+          "tool": "manual",
+          "template": "POV: [TREND_NAME] 챌린지를 [VARIANT_AESTHETIC]가 따라한다면"
+        },
+        {
+          "stage": "video-1",
+          "tool": "luma-ray-2-t2v",
+          "prompt_template": "[VARIANT_AESTHETIC] character performing [TREND_KEY_ACTION], dynamic camera movement matching the trend rhythm, 9:16 vertical, [TREND_VIBE] mood, cinematic film quality",
+          "duration": 5
+        },
+        {
+          "stage": "video-2",
+          "tool": "luma-ray-2-t2v",
+          "prompt_template": "Same [VARIANT_AESTHETIC] character, second beat of trend, [DIFFERENT_ACTION], smooth continuation",
+          "duration": 5
+        },
+        {
+          "stage": "edit",
+          "tool": "capcut",
+          "checklist": [
+            "[0~1초] 원본 트렌드 1초 인서트 + 자막 'AI 버전 봐봐'",
+            "[1~11초] Luma 영상 2개 비트 매칭 연결",
+            "[11~14초] 원본 vs AI 분할 화면",
+            "[14~16초] CTA",
+            "트렌드 사운드 동기화"
+          ]
+        }
+      ],
+      "caption_template": "[TREND_NAME]을 AI가 따라하면 이렇게 됨 🤯",
+      "credit_cost_estimate_krw": 2000
+    }
+  },
+  "weekly_workflow": {
+    "tuesday_evening": "트렌드 모니터링 1시간 → 주간 트렌드 보드 업데이트 → 수요일 게시할 트렌드 1개 픽 + 모드 결정",
+    "wednesday_morning": "분해 4요소 워크시트 작성 → 모드별 stages 실행",
+    "wednesday_afternoon": "편집 + 검수",
+    "wednesday_evening": "21:00 KST 게시 + 30분 댓글 응대"
+  },
+  "fallback_strategy": "트렌드 모니터링에서 적합한 게 없으면 → 자체 SaaS templates 중 인기 트렌드형 (dance-challenge, rotate-360) 활용해 'AI로 만든 댄스챌린지 모음' 시리즈 게시"
+}

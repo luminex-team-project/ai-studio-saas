@@ -1,0 +1,158 @@
+{
+  "$schema": "v1",
+  "concept_id": 4,
+  "concept_name": "ai-news",
+  "description": "AI 뉴스 60초 큐레이션. ChatGPT 스크립트 + HeyGen 얼굴 + Luma B-roll. 카테고리별 시각화 프롬프트 트리.",
+  "variables": {
+    "NEWS_TITLE": "뉴스 제목 한 줄 (한글)",
+    "NEWS_SUMMARY": "ChatGPT 요약본",
+    "KEY_NUMBERS": "핵심 수치 (예: $200/월, 30% 향상)",
+    "COMPANY": "관련 기업 (예: OpenAI, Anthropic)",
+    "MODEL_NAME": "모델명 (예: GPT-5, Claude 4)"
+  },
+  "script_generation_prompt": {
+    "tool": "chatgpt-plus",
+    "prompt_template": "다음 AI 뉴스를 60초 한국어 숏폼 영상 스크립트로 변환해줘.\n\n[NEWS_URL 또는 본문 붙여넣기]\n\n요구사항:\n- 총 150 단어 내외\n- 구조: [0~5초 훅] [5~45초 본문 3포인트] [45~60초 CTA]\n- 훅: 충격적/궁금한 한 줄 (예: \"이거 진짜 미쳤음\")\n- 본문: ① 무엇이 달라졌나 ② 한국 사용자 영향 ③ 시장 영향\n- CTA: 댓글 유도 + 채널 구독 자연스럽게\n- 톤: 친근한 동네 형/누나, 존댓말. 전문 용어는 한 번 풀어 설명\n- 영어 약어는 한 번씩 풀어쓰기 (예: \"GPT-5, 그러니까 챗지피티 5세대\")"
+  },
+  "broll_categories": {
+    "model-launch": {
+      "description": "신규 AI 모델 발표 뉴스",
+      "broll_prompts": [
+        {
+          "tool": "luma-ray-2-t2v",
+          "prompt": "Macro close-up of a glowing AI processor chip on dark surface, blue and orange light pulses radiating from circuit pathways, slow rotation, cinematic film grain, vertical 9:16",
+          "duration": 5
+        },
+        {
+          "tool": "luma-ray-2-t2v",
+          "prompt": "Abstract neural network nodes connecting and lighting up in sequence, holographic blue and white particles flowing through 3D space, dynamic camera flythrough, 9:16",
+          "duration": 5
+        },
+        {
+          "tool": "luma-ray-2-t2v",
+          "prompt": "Hands typing on a sleek laptop keyboard, screen showing AI chat interface with text streaming, soft desk lamp light, top-down angle, 9:16",
+          "duration": 5
+        },
+        {
+          "tool": "luma-ray-2-t2v",
+          "prompt": "Floating 3D logo of [COMPANY] dissolving into particles and reforming, dark cinematic background, lens flare, 9:16",
+          "duration": 5
+        }
+      ]
+    },
+    "pricing-update": {
+      "description": "가격/요금제 변경 뉴스",
+      "broll_prompts": [
+        {
+          "tool": "luma-ray-2-t2v",
+          "prompt": "3D animated bar chart growing upward with floating dollar signs, glassmorphism style, smooth camera dolly, vertical 9:16",
+          "duration": 5
+        },
+        {
+          "tool": "luma-ray-2-t2v",
+          "prompt": "Coins falling in slow motion onto a glowing AI chip, blue rim light, dramatic shadows, macro lens, 9:16",
+          "duration": 5
+        },
+        {
+          "tool": "luma-ray-2-t2v",
+          "prompt": "Korean person looking at smartphone screen with surprised expression, blurred cafe background, golden hour, 9:16",
+          "duration": 5
+        }
+      ]
+    },
+    "company-news": {
+      "description": "기업 인수/투자/조직 변화",
+      "broll_prompts": [
+        {
+          "tool": "luma-ray-2-t2v",
+          "prompt": "Modern glass tech building exterior at golden hour, drone shot pulling back, lens flare, vertical 9:16",
+          "duration": 5
+        },
+        {
+          "tool": "luma-ray-2-t2v",
+          "prompt": "Empty modern conference room with floating holographic charts above the table, soft ambient lighting, slow camera dolly, 9:16",
+          "duration": 5
+        },
+        {
+          "tool": "luma-ray-2-t2v",
+          "prompt": "Two giant 3D logos colliding and merging into one, particles and energy waves, cinematic, dark background, 9:16",
+          "duration": 5
+        }
+      ]
+    },
+    "user-tool-impact": {
+      "description": "일반 사용자에게 영향 (도구/기능)",
+      "broll_prompts": [
+        {
+          "tool": "luma-ray-2-t2v",
+          "prompt": "Hands using smartphone, AI chat app interface visible, finger taps generate animated response bubbles, top-down view, soft warm lighting, 9:16",
+          "duration": 5
+        },
+        {
+          "tool": "luma-ray-2-t2v",
+          "prompt": "Korean office worker at desk, looking at AI-generated content on monitor with focused expression, modern office, 9:16",
+          "duration": 5
+        },
+        {
+          "tool": "luma-ray-2-t2v",
+          "prompt": "Multiple holographic app icons floating around a central glowing AI orb, sci-fi aesthetic, particles, 9:16",
+          "duration": 5
+        }
+      ]
+    },
+    "korea-ai-industry": {
+      "description": "한국 AI 산업 (네이버, 카카오, 스타트업)",
+      "broll_prompts": [
+        {
+          "tool": "luma-ray-2-t2v",
+          "prompt": "Seoul cityscape at night with neon lights, drone shot panning across skyline, modern Korean tech aesthetic, 9:16",
+          "duration": 5
+        },
+        {
+          "tool": "luma-ray-2-t2v",
+          "prompt": "Korean engineers in modern startup office working on multiple monitors with code and AI visualizations, soft cinematic lighting, 9:16",
+          "duration": 5
+        }
+      ]
+    }
+  },
+  "heygen_setup": {
+    "tool": "heygen-photo-avatar",
+    "one_time_setup": [
+      "본인 셀카 정면 등록 (Photo Avatar)",
+      "본인 보이스 1분 클립 등록 (Voice)",
+      "Default 9:16 비율 + Plain white 배경"
+    ],
+    "per_video": [
+      "스크립트 텍스트 붙여넣기",
+      "발음 어색 단어 → Pronunciation 기능으로 수정",
+      "Generate (5~10분 대기) → 다운로드"
+    ]
+  },
+  "edit_template": {
+    "tool": "capcut",
+    "structure": [
+      {"time": "0~5s", "main": "broll-1", "overlay": "큰 자막 [NEWS_TITLE]", "audio": "voice hook"},
+      {"time": "5~15s", "main": "broll-2 75%", "pip": "heygen 25% 우하단", "overlay": "포인트 1 자막", "audio": "voice point 1"},
+      {"time": "15~30s", "main": "broll-3 75%", "pip": "heygen 25%", "overlay": "포인트 2 + 키워드 모션 자막", "audio": "voice point 2"},
+      {"time": "30~45s", "main": "broll-4 75%", "pip": "heygen 25%", "overlay": "포인트 3 + [KEY_NUMBERS] 줌인", "audio": "voice point 3"},
+      {"time": "45~55s", "main": "heygen 100%", "overlay": "CTA 자막", "audio": "voice CTA"},
+      {"time": "55~60s", "main": "워터마크 강조", "overlay": "Made with sora2-video-saas"}
+    ],
+    "checklist": [
+      "자동 자막 ON + 키워드 오렌지(#FF6B35) 강조",
+      "BGM: Lo-fi Tech 또는 Future Bass -22dB",
+      "워터마크 좌상단 'DAY.[일자]'",
+      "음성 -6dB로 통일"
+    ]
+  },
+  "production_checklist": [
+    "큐레이션 점수 30점 이상 뉴스 픽 (ai-news-sources.md 점수표)",
+    "ChatGPT 스크립트 생성 (script_generation_prompt 템플릿)",
+    "HeyGen 영상 생성 시작 → 대기하는 동안",
+    "Luma B-roll 4~5컷 병렬 생성 (broll_categories에서 픽)",
+    "CapCut 편집 (edit_template.structure 따라)",
+    "캡션 + 해시태그 (concept_4_ai_news)",
+    "월요일 19:00 KST 게시 (또는 뉴스 발생 후 12시간 내)"
+  ]
+}

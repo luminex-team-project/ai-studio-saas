@@ -1,0 +1,174 @@
+{
+  "$schema": "v1",
+  "concept_id": 2,
+  "concept_name": "webtoon-acting",
+  "description": "웹툰/애니 명장면 실사 연기. 본인 얼굴(--cref) + 장면 분해 템플릿. [SCENE_DESCRIPTION], [OUTFIT], [BACKGROUND], [ACTION], [CAMERA] 변수 치환.",
+  "variables": {
+    "OWNER_CREF_URL": "shared/character-profiles.json#owner.midjourney_cref_url",
+    "SCENE_DESCRIPTION": "장면 한 줄 요약 (예: 변신 시퀀스)",
+    "OUTFIT": "의상 묘사 (영어)",
+    "BACKGROUND": "배경 묘사 (영어)",
+    "ACTION": "동작 시퀀스 (영어, 1초 단위)",
+    "CAMERA": "카메라 무브 (영어)",
+    "MOOD": "감정/조명 (영어)",
+    "ORIGINAL_TITLE": "원작 작품명 (자막 출처용)"
+  },
+  "scene_decomposition_template": {
+    "description": "원작 명장면을 4요소로 분해해서 채우는 워크시트",
+    "fields": {
+      "outfit": "의상 (재질, 색상, 액세서리)",
+      "background": "배경 (장소, 조명, 디테일 3개)",
+      "action": "동작 시퀀스 (1초 단위 4~6 비트)",
+      "camera": "카메라 (앵글 + 무브 + 렌즈 느낌)"
+    },
+    "example": {
+      "scene": "이세계 회귀물 변신씬",
+      "outfit": "black hooded cloak, silver armor underneath, glowing rune pendant",
+      "background": "ruined ancient temple, torch fire, swirling mist, blue moonlight",
+      "action": "step backward, cloak unfurls, hands raised, light gathers in palms, eyes glow, energy releases",
+      "camera": "low angle slow push-in, then 360 orbit around character, ending close-up on glowing eyes",
+      "mood": "epic cinematic, dramatic backlighting, film grain"
+    }
+  },
+  "scene_archetypes": {
+    "transformation": {
+      "description": "변신/각성 시퀀스 (와우 효과 최강)",
+      "duration_sec": 20,
+      "stages": [
+        {
+          "stage": "keyframe-before",
+          "tool": "midjourney-v7",
+          "prompt": "Cinematic shot of a Korean person, [BEFORE_OUTFIT: e.g., simple modern hoodie], standing in [BACKGROUND], soft moody lighting, neutral vulnerable expression, photorealistic film still, shot on Arri Alexa 65mm",
+          "params_template": "--cref [OWNER_CREF_URL] --cw 80 --ar 9:16 --v 7 --s 400"
+        },
+        {
+          "stage": "keyframe-after",
+          "tool": "midjourney-v7",
+          "prompt": "Cinematic shot of the same Korean person, [OUTFIT: e.g., dark armor with glowing runes], standing in [BACKGROUND], dramatic backlighting, intense determined expression, glowing eyes, photorealistic film still, shot on Arri Alexa 65mm",
+          "params_template": "--cref [OWNER_CREF_URL] --cw 80 --ar 9:16 --v 7 --s 400"
+        },
+        {
+          "stage": "video-multi",
+          "tool": "kling-2.5-pro-multi",
+          "input_start": "{stage:keyframe-before}",
+          "input_end": "{stage:keyframe-after}",
+          "prompt": "Smooth transformation sequence: [ACTION], [CAMERA], dramatic lighting shift from soft to intense, cinematic motion blur",
+          "duration": 5
+        },
+        {
+          "stage": "video-action-climax",
+          "tool": "kling-2.5-pro-i2v",
+          "input_image": "{stage:keyframe-after}",
+          "prompt": "[ACTION climax: e.g., releases burst of energy], cape and hair flow dynamically, slow motion impact, [CAMERA: low angle to dolly out]",
+          "duration": 5
+        },
+        {
+          "stage": "voice",
+          "tool": "elevenlabs-clone",
+          "voice_id_ref": "shared/character-profiles.json#owner.elevenlabs_voice_id",
+          "script_template": "내가 만약 [ORIGINAL_TITLE] 주인공이라면. 이 정도?"
+        },
+        {
+          "stage": "edit",
+          "tool": "capcut",
+          "checklist": [
+            "[0~1초] 원작 인서트 1컷 + 자막 '이 장면 기억나?' + 출처 자막 '원작: [ORIGINAL_TITLE]'",
+            "[1~6초] 변신 트랜지션 영상 (글리치 트랜지션 인)",
+            "[6~13초] 액션 클라이맥스 영상 + 비트 매칭 컷",
+            "[13~17초] 클로즈업 + 보이스",
+            "[17~20초] CTA 자막",
+            "BGM: 원작 OST 패러디 또는 에픽 트레일러 BGM",
+            "워터마크: 'SCENE.[숫자]' + 'Made with sora2-video-saas'"
+          ]
+        }
+      ],
+      "caption_template": "내가 만약 [ORIGINAL_TITLE] 주인공이라면 🌪 (AI 패러디)"
+    },
+    "emotional-closeup": {
+      "description": "감정 클로즈업 (눈물, 분노, 결의 등)",
+      "duration_sec": 15,
+      "stages": [
+        {
+          "stage": "keyframe",
+          "tool": "midjourney-v7",
+          "prompt": "Extreme close-up cinematic shot of Korean person's face, [MOOD: e.g., single tear running down cheek with quivering lip], [BACKGROUND: blurred bokeh of meaningful location], rim lighting catching the tear, photorealistic film still, shot on 85mm lens shallow depth of field",
+          "params_template": "--cref [OWNER_CREF_URL] --cw 90 --ar 9:16 --v 7 --s 350"
+        },
+        {
+          "stage": "video",
+          "tool": "kling-2.5-pro-i2v",
+          "input_image": "{stage:keyframe}",
+          "prompt": "Single tear slowly rolls down cheek, lip quivers, eyes blink slowly, micro-expression shift from sadness to determination, [CAMERA: very slow push-in to extreme close-up of eyes]",
+          "duration": 5
+        },
+        {
+          "stage": "voice",
+          "tool": "elevenlabs-clone",
+          "script_template": "그 장면, 진짜였으면 어땠을까."
+        }
+      ],
+      "caption_template": "이 컷 보면 눈물 남 🥲 [ORIGINAL_TITLE] (AI)"
+    },
+    "action-combat": {
+      "description": "액션 전투 시퀀스 (다이내믹 카메라)",
+      "duration_sec": 22,
+      "stages": [
+        {
+          "stage": "keyframe-1",
+          "tool": "midjourney-v7",
+          "prompt": "Mid-action shot of Korean fighter, [OUTFIT: combat outfit], wielding [WEAPON or hands raised in martial arts pose], [BACKGROUND: combat arena], dynamic motion frozen, dust particles, dramatic lighting, photorealistic film still --ar 9:16 --v 7 --s 400",
+          "params_template": "--cref [OWNER_CREF_URL] --cw 80 --ar 9:16 --v 7 --s 400"
+        },
+        {
+          "stage": "video-1",
+          "tool": "kling-2.5-pro-i2v",
+          "input_image": "{stage:keyframe-1}",
+          "prompt": "Fighter executes a powerful spinning strike, dust and debris fly, [CAMERA: 180 degree orbit around the action], slow motion 60fps feel",
+          "duration": 5
+        },
+        {
+          "stage": "video-2",
+          "tool": "kling-2.5-pro-i2v",
+          "input_image": "{stage:keyframe-1}",
+          "prompt": "Fighter dodges incoming attack with backflip, lands in fighting stance, [CAMERA: low angle dolly with the action], cinematic slow-mo",
+          "duration": 5
+        }
+      ],
+      "caption_template": "이 액션 따라하기 미친 짓 ⚔️ [ORIGINAL_TITLE]"
+    },
+    "flashback-melancholy": {
+      "description": "회상 장면 (감성)",
+      "duration_sec": 18,
+      "stages": [
+        {
+          "stage": "keyframe",
+          "tool": "midjourney-v7",
+          "prompt": "Cinematic shot of Korean person, [OUTFIT: simple nostalgic outfit], in [BACKGROUND: meaningful place from past], golden hour warm light, wistful expression, soft film grain, vintage color grading like Wong Kar-wai, photorealistic --ar 9:16 --v 7 --s 350",
+          "params_template": "--cref [OWNER_CREF_URL] --cw 85 --ar 9:16 --v 7 --s 350"
+        },
+        {
+          "stage": "video",
+          "tool": "kling-2.5-pro-i2v",
+          "input_image": "{stage:keyframe}",
+          "prompt": "Subject turns slowly to camera, soft melancholic smile, wind catches their hair, golden light shifts, [CAMERA: slow handheld dolly with light shake], dreamlike atmosphere",
+          "duration": 5
+        },
+        {
+          "stage": "voice",
+          "tool": "elevenlabs-clone",
+          "script_template": "그때로 다시 돌아갈 수 있다면."
+        }
+      ],
+      "caption_template": "이 회상씬 분위기 진짜 ✨ [ORIGINAL_TITLE]"
+    }
+  },
+  "production_checklist": [
+    "본인 셀카 3장 → Midjourney --cref URL 생성 (1회 등록, character-profiles.json에 저장)",
+    "원작 명장면 선정 + 30초 클립 다운로드 (1초 인서트용)",
+    "scene_decomposition_template으로 4요소 분해",
+    "scene_archetypes 중 매칭되는 것 픽 → 변수 치환",
+    "stages 순차 실행",
+    "원작 인서트 + 출처 자막 + 'AI 패러디' 명시",
+    "금요일 22:00 KST 게시"
+  ]
+}

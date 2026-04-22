@@ -1,0 +1,62 @@
+{
+  "$schema": "v1",
+  "description": "플랫폼 × 컨셉 해시태그 풀. 게시 시 컨셉 핵심 5개 + 트렌드 3개 = 8~10개 권장.",
+  "platforms": {
+    "tiktok": {
+      "max_recommended": 8,
+      "rules": "처음 3개는 영상 1초 안에 시각적으로 해시되는 키워드. 한국 KR 타겟이면 한글 우선."
+    },
+    "youtube_shorts": {
+      "max_recommended": 5,
+      "rules": "타이틀에 핵심 1개 #shorts 필수. 설명란에 추가 해시태그."
+    },
+    "instagram_reels": {
+      "max_recommended": 10,
+      "rules": "캡션 끝에 모아서 게시. 한국+영문 혼용 가능."
+    }
+  },
+  "core_brand_tags": [
+    "#AI영상",
+    "#AI광고",
+    "#AI크리에이터",
+    "#sora2",
+    "#AI숏폼"
+  ],
+  "concept_tags": {
+    "concept_1_cosmetic": {
+      "korean": ["#모닝루틴", "#스킨케어", "#화장품추천", "#뷰티팁", "#수분크림", "#앰플", "#클린뷰티", "#K뷰티"],
+      "english": ["#kbeauty", "#skincare", "#morningroutine", "#beautytips", "#aibeauty"],
+      "trend_pool": ["#오늘뭐샀", "#내돈내산", "#뷰티튜브"]
+    },
+    "concept_1_health_supplement": {
+      "korean": ["#건강기능식품", "#영양제추천", "#콜라겐", "#프로틴", "#다이어트", "#모닝루틴", "#야간루틴", "#건강관리"],
+      "english": ["#supplement", "#wellness", "#healthroutine", "#collagen"],
+      "trend_pool": ["#내돈내산", "#솔직후기"]
+    },
+    "concept_2_webtoon": {
+      "korean": ["#웹툰", "#명장면", "#실사화", "#AI연기", "#AI패러디", "#와우모먼트", "#애니실사화"],
+      "english": ["#webtoon", "#anime", "#liveaction", "#aicosplay", "#aiparody"],
+      "trend_pool": ["#내가만약", "#만약에", "#장면재현"]
+    },
+    "concept_3_trend": {
+      "korean": ["#챌린지", "#트렌드", "#댄스챌린지", "#릴스챌린지", "#숏츠챌린지"],
+      "english": ["#trending", "#challenge", "#fyp", "#viral", "#reels"],
+      "trend_pool": "당일 트렌드에서 추출 (TikTok Creative Center 참조)"
+    },
+    "concept_4_ai_news": {
+      "korean": ["#AI뉴스", "#AI소식", "#GPT", "#클로드", "#제미나이", "#오픈AI", "#앤트로픽", "#테크뉴스"],
+      "english": ["#ainews", "#openai", "#anthropic", "#claude", "#chatgpt", "#aitools"],
+      "trend_pool": ["#AI투자", "#AI창업", "#생산성"]
+    }
+  },
+  "platform_universals": {
+    "tiktok": ["#fyp", "#fyp한국", "#추천"],
+    "youtube_shorts": ["#shorts", "#쇼츠"],
+    "instagram_reels": ["#릴스", "#reels", "#explore"]
+  },
+  "blacklist": [
+    "#follow4follow",
+    "#like4like",
+    "스팸성 태그 (알고리즘 패널티 위험)"
+  ]
+}

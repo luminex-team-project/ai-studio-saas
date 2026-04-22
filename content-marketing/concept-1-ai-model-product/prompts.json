@@ -1,0 +1,231 @@
+{
+  "$schema": "v1",
+  "concept_id": 1,
+  "concept_name": "ai-model-product",
+  "description": "AI 모델 × 제품 광고. 고정 인물 3명 (yuna/jihoon/haewon) + Seedance 2.0 Identity Lock. 화장품/건강식품 카테고리별 즉시 사용 가능한 프롬프트 트리.",
+  "fixed_models": ["yuna", "jihoon", "haewon"],
+  "primary_tool": "seedance-2.0-identity-lock",
+  "fallback_tool": "kling-2.5-pro-i2v + midjourney-cref",
+  "variables": {
+    "PRODUCT_NAME": "제품명 (예: 글로우 세럼)",
+    "PRODUCT_BENEFIT": "핵심 효능 1개 (예: 모공 케어)",
+    "MODEL_SLUG": "yuna | jihoon | haewon",
+    "IDENTITY_LOCK_ID": "shared/character-profiles.json#product_models.models[].seedance_identity_lock_id",
+    "VOICE_ID": "shared/character-profiles.json#product_models.models[].elevenlabs_voice_id"
+  },
+  "categories": {
+    "cosmetic": {
+      "morning-routine": {
+        "duration_sec": 25,
+        "platform_target": ["tiktok", "shorts", "reels"],
+        "recommended_models": ["yuna", "haewon"],
+        "stages": [
+          {
+            "stage": "video-generation-primary",
+            "tool": "seedance-2.0-identity-lock",
+            "mode": "t2v",
+            "identity_lock_ref": "{MODEL_SLUG}",
+            "prompt": "Korean woman early morning in soft sunlit bathroom, holding [PRODUCT_NAME] cream jar in right hand, fresh skin no makeup, gently scoops cream with ring finger and applies onto cheek with circular motion, soft natural smile, slow camera push-in from medium to close-up, mirror reflection composition, photorealistic film grain, 9:16 vertical, preserve product label and skin texture",
+            "duration": 5,
+            "negative": "blurry, distorted hands, product label change, deformed face, extra fingers, plastic skin"
+          },
+          {
+            "stage": "video-generation-bcut",
+            "tool": "seedance-2.0-identity-lock",
+            "mode": "t2v",
+            "identity_lock_ref": "{MODEL_SLUG}",
+            "prompt": "Same Korean woman, close-up of [PRODUCT_NAME] cream texture being absorbed into cheek, soft morning light, gentle finger pressing motion, macro lens feel, 9:16 vertical",
+            "duration": 5
+          },
+          {
+            "stage": "voice-line-1",
+            "tool": "elevenlabs",
+            "voice_id_ref": "{VOICE_ID}",
+            "script_template": "오늘 아침 루틴, [PRODUCT_NAME] 하나로 끝났어요. 발림성 진짜 인생크림."
+          },
+          {
+            "stage": "voice-line-2",
+            "tool": "elevenlabs",
+            "script_template": "[PRODUCT_BENEFIT] 효과는 한 달 쓰니까 확실히 보여요."
+          },
+          {
+            "stage": "edit",
+            "tool": "capcut",
+            "checklist": [
+              "[0~2초] 훅 자막: '이게 진짜 AI?'",
+              "[2~12초] Seedance 영상 1 + 보이스 라인 1",
+              "[12~22초] Seedance 영상 2 + 보이스 라인 2 + 제품명 모션 텍스트",
+              "[22~28초] CTA 자막: '프로필 링크에서 직접 만들어보세요'",
+              "BGM: 모델 톤 매칭 (yuna=어쿠스틱 팝, haewon=미니멀 피아노) -18dB",
+              "워터마크: 좌상단 'EP.[숫자]', 우하단 'Made with sora2-video-saas'"
+            ]
+          }
+        ],
+        "caption_template": "이게 AI라고? 🤍 [PRODUCT_NAME] 모닝 루틴",
+        "hashtags_pool": "shared/hashtag-library.json#concept_tags.concept_1_cosmetic"
+      },
+      "before-after": {
+        "duration_sec": 20,
+        "recommended_models": ["haewon"],
+        "stages": [
+          {
+            "stage": "video-generation",
+            "tool": "seedance-2.0-identity-lock",
+            "mode": "t2v",
+            "identity_lock_ref": "{MODEL_SLUG}",
+            "prompt": "Korean woman, smooth transition from tired morning face with slight dark circles to glowing radiant skin with confident smile, [PRODUCT_NAME] held in hand visible throughout transition, golden hour to soft daylight lighting shift, professional beauty commercial style, 9:16 vertical",
+            "duration": 5,
+            "negative": "abrupt cut, identity drift, distorted face"
+          },
+          {
+            "stage": "voice",
+            "tool": "elevenlabs",
+            "voice_id_ref": "{VOICE_ID}",
+            "script_template": "2주 썼더니 진짜 달라졌어요. [PRODUCT_BENEFIT] 이 정도면 인정."
+          }
+        ],
+        "caption_template": "2주 비교샷 충격 😱 [PRODUCT_NAME]",
+        "hashtags_pool": "shared/hashtag-library.json#concept_tags.concept_1_cosmetic"
+      },
+      "ingredient-closeup": {
+        "duration_sec": 18,
+        "recommended_models": ["haewon"],
+        "stages": [
+          {
+            "stage": "video-generation",
+            "tool": "seedance-2.0-identity-lock",
+            "mode": "t2v",
+            "identity_lock_ref": "{MODEL_SLUG}",
+            "prompt": "Macro shot of Korean woman's hand with glowing skin scooping [PRODUCT_NAME] cream from jar, viscous glossy cream texture stretches between fingers in slow motion, light reflects on cream, hand rotates slowly, premium beauty commercial cinematic macro lens, 9:16 vertical",
+            "duration": 5
+          },
+          {
+            "stage": "voice",
+            "tool": "elevenlabs",
+            "voice_id_ref": "{VOICE_ID}",
+            "script_template": "[PRODUCT_NAME], 핵심은 이 텍스처. [PRODUCT_BENEFIT] 진짜 다르더라고요."
+          }
+        ],
+        "caption_template": "이 텍스처 보세요 ✨ [PRODUCT_NAME]"
+      },
+      "male-grooming": {
+        "duration_sec": 22,
+        "recommended_models": ["jihoon"],
+        "stages": [
+          {
+            "stage": "video-generation",
+            "tool": "seedance-2.0-identity-lock",
+            "mode": "t2v",
+            "identity_lock_ref": "jihoon",
+            "prompt": "Korean man in modern minimal bathroom, applying [PRODUCT_NAME] onto freshly cleansed face with palm pressing motion, athletic shoulders visible, soft cool morning light, confident expression, photorealistic, 9:16 vertical",
+            "duration": 5,
+            "negative": "feminine pose, soft lighting, distorted hands"
+          },
+          {
+            "stage": "voice",
+            "tool": "elevenlabs",
+            "voice_id_ref": "shared/character-profiles.json#product_models.models[jihoon].elevenlabs_voice_id",
+            "script_template": "[PRODUCT_NAME] 한 달 써본 결과. 남자 피부도 [PRODUCT_BENEFIT] 챙겨야죠."
+          }
+        ],
+        "caption_template": "남자 스킨케어 진심 🧴 [PRODUCT_NAME]"
+      }
+    },
+    "health-supplement": {
+      "morning-energy": {
+        "duration_sec": 22,
+        "recommended_models": ["yuna", "jihoon"],
+        "stages": [
+          {
+            "stage": "video-generation",
+            "tool": "seedance-2.0-identity-lock",
+            "mode": "t2v",
+            "identity_lock_ref": "{MODEL_SLUG}",
+            "prompt": "Korean person in bright morning kitchen, holding [PRODUCT_NAME] bottle, pours two capsules into palm, takes them with glass of water, fresh smile, energetic confident vibe, natural soft window light, slow camera dolly from hand to face, photorealistic lifestyle, 9:16 vertical",
+            "duration": 5
+          },
+          {
+            "stage": "voice",
+            "tool": "elevenlabs",
+            "voice_id_ref": "{VOICE_ID}",
+            "script_template": "아침에 [PRODUCT_NAME] 두 알. 오늘도 [PRODUCT_BENEFIT] 풀파워."
+          }
+        ],
+        "caption_template": "모닝 루틴 한 알 ⚡ [PRODUCT_NAME]",
+        "hashtags_pool": "shared/hashtag-library.json#concept_tags.concept_1_health_supplement"
+      },
+      "night-recovery": {
+        "duration_sec": 25,
+        "recommended_models": ["yuna", "haewon"],
+        "stages": [
+          {
+            "stage": "video-generation",
+            "tool": "seedance-2.0-identity-lock",
+            "mode": "t2v",
+            "identity_lock_ref": "{MODEL_SLUG}",
+            "prompt": "Korean woman in cozy bedroom evening with warm bedside lamp glow, opens [PRODUCT_NAME] package, takes a jelly stick or capsule, peaceful relaxed gentle smile to camera, comfy pajamas, warm cinematic atmosphere, slow camera dolly, photorealistic, 9:16 vertical",
+            "duration": 5
+          },
+          {
+            "stage": "voice",
+            "tool": "elevenlabs",
+            "voice_id_ref": "{VOICE_ID}",
+            "script_template": "자기 전 [PRODUCT_NAME] 한 포. [PRODUCT_BENEFIT] 진짜 차원 달라요."
+          }
+        ],
+        "caption_template": "자기 전 루틴 🌙 [PRODUCT_NAME]"
+      },
+      "unboxing-review": {
+        "duration_sec": 28,
+        "recommended_models": ["yuna"],
+        "stages": [
+          {
+            "stage": "video-generation",
+            "tool": "seedance-2.0-identity-lock",
+            "mode": "t2v",
+            "identity_lock_ref": "yuna",
+            "prompt": "Korean woman at minimal white desk, opens [PRODUCT_NAME] package with genuine excited surprised expression, lifts product out, examines details with curiosity, top-down hand shot composition then face close-up, smooth handheld feel, clean studio lifestyle photography, 9:16 vertical",
+            "duration": 5
+          },
+          {
+            "stage": "voice",
+            "tool": "elevenlabs",
+            "voice_id_ref": "shared/character-profiles.json#product_models.models[yuna].elevenlabs_voice_id",
+            "script_template": "[PRODUCT_NAME] 처음 받아봤는데 패키지부터 진심이에요. [PRODUCT_BENEFIT] 기대됨."
+          }
+        ],
+        "caption_template": "내돈내산 솔직 후기 📦 [PRODUCT_NAME]"
+      },
+      "sport-protein": {
+        "duration_sec": 25,
+        "recommended_models": ["jihoon"],
+        "stages": [
+          {
+            "stage": "video-generation",
+            "tool": "seedance-2.0-identity-lock",
+            "mode": "t2v",
+            "identity_lock_ref": "jihoon",
+            "prompt": "Korean athletic man post-workout in modern gym, scoops [PRODUCT_NAME] powder into shaker bottle, shakes confidently, takes a sip with satisfied focused expression, dynamic gym lighting, slight motion blur on shake, photorealistic, 9:16 vertical",
+            "duration": 5
+          },
+          {
+            "stage": "voice",
+            "tool": "elevenlabs",
+            "voice_id_ref": "shared/character-profiles.json#product_models.models[jihoon].elevenlabs_voice_id",
+            "script_template": "운동 후 [PRODUCT_NAME] 한 스쿱. [PRODUCT_BENEFIT] 진짜 차이 남."
+          }
+        ],
+        "caption_template": "운동 후 한 스쿱 💪 [PRODUCT_NAME]"
+      }
+    }
+  },
+  "production_checklist": [
+    "제품 사진 3장 확보",
+    "PRODUCT_NAME / PRODUCT_BENEFIT 변수 치환",
+    "MODEL_SLUG 결정 → product_models.selection_guide 조회",
+    "Seedance 2.0 Identity Lock 대시보드에서 해당 identity 픽 + 프롬프트 입력",
+    "5초 영상 1~2개 생성 → CapCut에서 컷 연결",
+    "보이스 1~2줄 생성 (모델별 voice_id 고정)",
+    "편집 + 캡션 + 화요일 20:00 KST 게시"
+  ]
+}
